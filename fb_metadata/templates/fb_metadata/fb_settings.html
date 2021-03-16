@@ -1,0 +1,160 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+
+{% block content %}
+<h1 class="mt-4">Facebook Settings</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active">{{ store.name }}</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-body">
+        The shop <span class="font-bold">{{ store.name }}</span> was created at {{ store.created_at }}
+    </div>
+</div>
+{% if not fb_metadata.commerce_account_id %}
+<div class="alert alert-danger" role="alert">
+    We've detected that you haven't properly connected to Facebook, so some of the information below may not be
+    available. <a href="{{ fb_url }}" class="alert-link">Click here to re-connect to Facebook</a>.
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">FB Commerce Account</div>
+            <div class="card-body">
+                Commerce Account ID: {{ fb_metadata.commerce_account_id | default:"N/A"}}
+                {% if fb_metadata.commerce_account_id %}
+                <p>Open Facebook Commerce Manager <a href="{{ fb_metadata.commerce_manager_url }}" ,
+                        target="_blank">view</a></p>
+                {% endif %}
+            </div>
+
+            <div class="card-header">FB Extensions</div>
+            <div class="card-body">
+                Registered external business id: {{ fb_metadata.fbe_external_business_id | default:"N/A"}}
+                {% if fb_metadata.commerce_account_id %}
+                <p>Open FBE management <a href="{{ fb_metadata.fbe_management_view_url }}" , target="_blank">view</a>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">FB Business Manager</div>
+            <div class="card-body">
+                Business Manager ID: {{ fb_metadata.fbe_business_manager_id | default:"N/A"}}
+                {% if fb_metadata.commerce_account_id %}
+                <p>Open Facebook Business Manager <a href="{{ fb_metadata.business_manager_url }}" ,
+                        target="_blank">view</a></p>
+                {% endif %}
+            </div>
+
+            <div class="card-header">FB Catalog</div>
+            <div class="card-body">
+                Catalog Manager ID: {{ fb_metadata.fb_catalog_id | default:"N/A"}}
+                {% if fb_metadata.commerce_account_id %}
+                <p>Open Facebook Catalog in Commerce Manager <a href="{{ fb_metadata.catalog_manager_url }}" ,
+                        target="_blank">view</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">FB Page Shop</div>
+            <div class="card-body">
+                {% if fb_metadata.fbe_page_id %}
+                {{ fb_metadata.fbe_page_id }}
+                {% else %}
+                N/A
+                {% endif %}
+            </div>
+
+            <div class="card-header">Instagram Profile</div>
+            <div class="card-body">
+                {% if fb_metadata.fbe_ig_profile_id %}
+                {{ fb_metadata.fbe_ig_profile_id }}
+                {% else %}
+                N/A
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">FB Pixel</div>
+            <div class="card-body">
+                {% if fb_metadata.fbe_pixel_id %}
+                {{ fb_metadata.fbe_pixel_id }}
+                {% else %}
+                N/A
+                {% endif %}
+            </div>
+            <div class="card-header">FB Ad Account</div>
+            <div class="card-body">
+                {% if fb_metadata.fbe_ad_account_id %}
+                {{ fb_metadata.fbe_ad_account_id }}
+                {% else %}
+                N/A
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+    {% if fb_metadata.fb_shop_setup_status or fb_metadata.fb_shop_payment_setup_status or fb_metadata.fb_shop_review_status %}
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            {% if fb_metadata.fb_shop_setup_status %}
+            <div class="card-header">Setup Status</div>
+            <div class="card-body">{{ fb_metadata.fb_shop_setup_status }}</div>
+            {% endif %}
+            {% if fb_metadata.fb_shop_payment_setup_status %}
+            <div class="card-header">Payment Status</div>
+            <div class="card-body">{{ fb_metadata.fb_shop_payment_setup_status }}</div>
+            {% endif %}
+            {% if fb_metadata.fb_shop_review_status %}
+            <div class="card-header">Review Status</div>
+            <div class="card-body">{{ fb_metadata.fb_shop_review_status }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<a href="{% url 'viewStores' %}" class="btn btn-secondary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-left"></i>
+    </span>
+    <span class="text">Back to Shops</span>
+</a>
+
+<a href="{% url 'viewProducts' store.id %}" class="btn btn-success btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-flag"></i>
+    </span>
+    <span class="text">Products</span>
+</a>
+
+<a href="{% url 'viewOrders' store.id %}" class="btn btn-success btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-flag"></i>
+    </span>
+    <span class="text">Orders</span>
+</a>
+
+<a href="{% url 'updateStore' store.id %}" class="btn btn-primary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-check"></i>
+    </span>
+    <span class="text">Update Shop</span>
+</a>
+
+{% endblock %}

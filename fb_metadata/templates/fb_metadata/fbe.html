@@ -1,0 +1,41 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+            <div class="card-header">
+                <h3 class="text-center font-weight-light my-4">Connect to Facebook</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                    {% endfor %}
+                    <div class="form-group">
+                        <label class="small mb-1" for="inputUsername">Business Name</label>
+                        {{form.business_name}}
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked disabled id="customSwitch">
+                            <label class="custom-control-label" for="customSwitch">Test Shop (Shop with dummy credentials)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-4 mb-0 text-center">
+                        <button class=" btn btn-primary" type="submit"><img class="inline"
+                                src="https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/OF6ddsGKpeB.png" alt="" width="24"
+                                height="24">
+                            <b>Continue with Facebook</b>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

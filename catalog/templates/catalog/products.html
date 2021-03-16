@@ -1,0 +1,69 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+
+{% block content %}
+<h1 class="mt-4">Products</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+    <li class="breadcrumb-item active">Products</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-body">
+        This is a list of all the products in {{ store.name }}'s Catalog.
+    </div>
+</div>
+
+{% for product in products %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <a class="card-block stretched-link text-decoration-none"
+                href="{% url 'viewProduct' store.id product.id %}"></a>
+            <div class="col-1">
+                <img class="img-thumbnail" src="{{ product.image_link }}" />
+            </div>
+            <div class="col-3">
+                <h3 class="card-title">{{ product.title }}</h3>
+                <p class="card-text">ID: {{ product.id }}<br />
+                    Inventory: {{ product.inventory }}<br />
+                    Price: <span id="{{ product.id }}">{{ product.amount }}{{product.currency}}</span><br />
+                    Condition: {{ product.condition }}<br />
+                    Brand: {{ product.brand }}<br />
+                </p>
+            </div>
+            <div class="col">
+                <p class="card-text">Description: {{ product.description }}<br />
+                </p>
+            </div>
+            <div style="z-index:2; position:relative" class="col">
+                <a class="btn btn-primary float-right" href="{% url 'updateProduct' store.id product.id %}">
+                    Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>formatCurrency("{{ product.currency }}", parseFloat("{{ product.amount }}"), "{{ product.id }}");</script>
+{% endfor %}
+
+<a href="{% url 'viewStore' store.id %}" class="btn btn-secondary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-left"></i>
+    </span>
+    <span class="text">Back to Shop</span>
+</a>
+
+<a href="{% url 'createProduct' store.id %}" class="btn btn-success btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-flag"></i>
+    </span>
+    <span class="text">Add product</span>
+</a>
+<a class="btn btn-warning btn-icon-split" href="{% url 'syncCatalog' store.id %}">
+    Manually Sync Catalog
+</a>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                {% if user.is_authenticated %}
+                <div class="nav-link btn-group dropright">
+                    {% if store.name is not None %}
+                    <button type="button" style="overflow: hidden"
+                        class="btn btn-primary btn-block row-fluid text-left text-nowrap"> {{ store.name }}
+                    </button>
+                    {% else %}
+                    <button type="button" class="btn btn-primary btn-block row-fluid text-left"> Select Shop </button>
+                    {% endif %}
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu position-fixed" style="z-index:5000; overflow-y: auto; max-height: 300px">
+                        {% for store_id, store_name in user_all_stores.items %}
+                        <a class="dropdown-item" href="{% url 'viewStore' store_id %}">{{ store_name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                <a class="nav-link" href="{% url 'index' %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Home
+                </a>
+                <a class="nav-link" href="{% url 'viewStores' %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Your Shops
+                </a>
+                <a class="nav-link" href="{% url 'createNewLocalStore' %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Create New Shop
+                </a>
+                {% if store.name is not None %}
+                <div class="sb-sidenav-menu-heading">Shop Settings</div>
+                <a class="nav-link" href="{% url 'viewStore' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Shop
+                </a>
+                <a class="nav-link" href="{% url 'viewProducts' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div>
+                    Products
+                </a>
+                <a class="nav-link" href="{% url 'viewOrders' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div>
+                    Orders
+                </a>
+                <div class="sb-sidenav-menu-heading">Facebook Settings</div>
+                {% if fb_metadata and store.unique_business_id == fb_metadata.fbe_external_business_id %}
+                <a class="nav-link" href="{% url 'viewFbSettings' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fab fa-facebook-f fa-fw"></i></div>
+                    Facebook Settings
+                </a>
+                <a class="nav-link btn btn-facebook btn-block" href="{% url 'viewAsyncTasks' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Background Tasks
+                </a>
+                {% else %}
+                <a class="nav-link btn btn-facebook btn-block" href="{% url 'fbe' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fab fa-facebook-f fa-fw"></i></div>
+                    Connect to Facebook
+                </a>
+                {% endif %}
+
+                {% if fb_metadata and store.unique_business_id == fb_metadata.fbe_external_business_id %}
+                <div class="sb-sidenav-menu-heading">Developer Settings</div>
+                <a class="nav-link" href="{% url 'tokenSettings' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div>
+                    Graph Token Settings
+                </a>
+                <a class="nav-link" href="{% url 'notifications' store.id %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div>
+                    Webhook Notifications
+                </a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="sb-sidenav-footer">
+            <div class="small">Logged in as:</div>
+            {{ user.username}}
+        </div>
+        {% endif %}
+    </nav>
+</div>

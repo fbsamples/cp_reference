@@ -1,0 +1,85 @@
+{% extends "core/header.html" %}
+
+{% block content %}
+<div class="mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'viewProducts' store.id %}">Products</a></li>
+        <li class="breadcrumb-item active">{{ product.id }}</li>
+    </ol>
+    <h4 class="text-muted">Product ID: {{ product.id }}</h4>
+</div>
+
+<div class="row mb-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <img class="img-thumbnail" src="{{ product.image_link}}" />
+                    </div>
+                    <div class="col">
+                        <h5 class="card-title">{{ product.title }}</h5>
+                        <h6 class="card-subtitle text-muted">ID: {{ product.id }}</h6><br />
+                        <b>Description: </b>{{ product.description }}<br />
+                        <b>Price: </b><span id="{{ product.id }}">{{ product.amount }}
+                            {{ product.currency }}</span><br />
+                        <b>Inventory: </b>{{ product.inventory }}<br />
+                        <b>Brand: </b>{{ product.brand }}<br />
+                        {% if product.product_group %}
+                        {% if product.color %}
+                        <b>Color: </b>{{ product.color }}<br />
+                        {% endif %}
+                        {% if product.gender %}
+                        <b>Gender: </b>{{ product.gender }}<br />
+                        {% endif %}
+                        {% if product.material %}
+                        <b>Material: </b>{{ product.material }}<br />
+                        {% endif %}
+                        {% if product.pattern %}
+                        <b>Pattern: </b>{{ product.pattern }}<br />
+                        {% endif %}
+                        {% if product.size %}
+                        <b>Size: </b>{{ product.size }}<br />
+                        {% endif %}
+                        {% endif %}
+                    </div>
+
+                    {% if product_variants %}
+                    <div class="col-3">
+                        <div style="z-index:2; position:relative" class="btn-group float-right">
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret">Variants</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                {% for prod in product_variants %}
+                                <a class="dropdown-item" href="{% url 'viewProduct' store.id prod.id %}">
+                                    {{ prod.title }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <script>
+                        formatCurrency("{{ product.currency }}", parseFloat("{{ product.amount }}"), "{{ product.id }}");
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-4">
+    <a href="{% url 'viewProducts' store.id %}">
+        <button class="btn btn-secondary">
+            <span class="icon text-white-50">
+                <i class="fas fa-arrow-left"></i>
+            </span>
+            Back to Products List
+        </button>
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+{% block content %}
+<h1 class="mt-4">View Orders</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+    <li class="breadcrumb-item active">Orders</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-body">
+        This is a list of all the orders.
+    </div>
+</div>
+
+{% for order in orders %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <a class="card-block stretched-link text-decoration-none"
+                href="{% url 'viewOrder' store.id order.orderId %}"></a>
+            <div class="col">
+                <h3 class="card-title">{{ order.items.0.title }}</h3>
+                <p class="card-subtitle text-muted">{{ order.status }} - {{ order.total_items }} item(s) - <span
+                        id="{{ order.orderId }}">{{ order.total_price }}
+                        {{ order.currency }}</span></p>
+                <div class="row">
+                    <div class="col-2">
+                        <img class="img-thumbnail" src="{{ order.items.0.image_link }}" />
+                    </div>
+                    <div class="col">
+                        <p class="card-text">Date Ordered: {{ order.created }}<br />
+                            Customer: {{ order.full_name }}<br />
+                            Facebook Order #: {{ order.ext_order_id }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div style="z-index:2; position:relative" class="btn-group float-right">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret">Actions</span>
+                    </button>
+
+                    <div class="dropdown-menu">
+                        {% if not order.can_fulfill and not order.can_cancel and not order.can_refund %}
+                        <div class="dropdown-item">None</div>
+                        {% endif %}
+                        {% if not order.missing_items %}
+                        {% if order.can_fulfill %}
+                        <a class="dropdown-item" href="{% url 'fulfillOrder' store.id order.orderId %}">
+                            Fulfill Order
+                        </a>
+                        {% endif %}
+                        {% if order.can_refund %}
+                        <a class="dropdown-item" href="{% url 'refundOrder' store.id order.orderId %}">
+                            Refund Order
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                        {% if order.can_cancel %}
+                        <a class="dropdown-item" href="{% url 'cancelOrder' store.id order.orderId %}">
+                            Cancel Order
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>formatCurrency("{{ order.currency }}", parseFloat("{{ order.total_price }}"), "{{ order.orderId }}");</script>
+{% endfor %}
+
+<a href="{% url 'viewStore' store.id %}" class="btn btn-secondary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-left"></i>
+    </span>
+    <span class="text">Back to Shop</span>
+</a>
+
+<a class="btn btn-warning btn-icon-split" href="{% url 'listAndAckOrders' store.id %}">
+    Manually Fetch Orders
+</a>
+
+{% endblock %}

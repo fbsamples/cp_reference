@@ -1,0 +1,39 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+
+{% block content %}
+<h1 class="mt-4">Background Jobs</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+    <li class="breadcrumb-item active">Background Jobs</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-body">
+        This is a list of all the background job statuses for {{ store.name }}.
+    </div>
+</div>
+
+{% for task in tasks %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <h3 class="card-title">{{ task.name }}</h3>
+            </div>
+            <div class="col">
+                <p class="card-text">Description: {{ task.description }}<br />
+                </p>
+            </div>
+            <div class="col">
+                <a class="btn btn-primary float-right" href="{% url task.view_method store.id %}">
+                    Manually Trigger Async Job
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

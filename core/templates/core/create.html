@@ -1,0 +1,54 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+{% block content %}
+<h1 class="mt-4">{{ page_title }}</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    {% for name, view, param in breadcrumbs %}
+    <li class="breadcrumb-item active"><a href="{% url view param %}">{{ name }}</a></li>
+    {% endfor %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+</ol>
+<div class="row">
+    <div class="col-lg-6">
+        <form action="" method="post">
+            {% csrf_token %}
+            <table class="mb-4">
+                {{ form.as_table }}
+                {% if needsProductCategories %}
+                <tr>
+                    <th>
+                        <label>
+                            Google Product Category:
+                        </label>
+                    </th>
+                    <td>
+                        <input type="hidden" id="google-product-category-id" name="google-product-category-id" value="">
+                        <input type="hidden" id="google-product-category-string" name="google-product-category-string"
+                            value="">
+                        <div class="btn-group" style="margin: 0px 24px">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" id="google-product-category-button">
+                                Select a Category
+                            </button>
+                            <div id="google-product-category-choices" class="dropdown-menu dropright text-wrap"
+                                style="overflow-y: auto; height: 300px; min-width: 250px">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            {% endif %}
+            <input class="btn btn-primary btn-icon-split" type="submit" value="Create">
+        </form>
+    </div>
+</div>
+{% if needsProductCategories %}
+<script>
+    let state = [];
+    fillProductChoices();
+</script>
+{% endif %}
+{% endblock %}

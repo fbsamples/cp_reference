@@ -1,0 +1,55 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+{% block content %}
+<h1 class="mt-4">Webhook Notifications</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+    <li class="breadcrumb-item active">Notifications</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-body">
+        This is a list of all webhook notifications received for this shop.
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Notifications
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Topic</th>
+                        <th>Event</th>
+                        <th>Raw</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notification in notifications %}
+                    <tr>
+                        <td>{{ notification.time_sent }}</td>
+                        <td>{{ notification.topic }}</td>
+                        <td>{{ notification.event }}</td>
+                        <td>{{ notification.raw_notification_data }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<a href="{% url 'viewStore' store.id %}" class="btn btn-secondary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-left"></i>
+    </span>
+    <span class="text">Back to Shop</span>
+</a>
+{% endblock %}

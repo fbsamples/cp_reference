@@ -1,0 +1,55 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+
+{% block content %}
+<h1 class="mt-4">Shop</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active">{{ store.name }}</li>
+</ol>
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="card mb-4">
+    <div class="card-body">
+        The shop <span class="font-bold">{{ store.name }}</span> was created at {{ store.created_at }}
+    </div>
+</div>
+
+<a href="{% url 'viewStores' %}" class="btn btn-secondary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-left"></i>
+    </span>
+    <span class="text">Back to Shops</span>
+</a>
+{% if not fb_metadata or store.unique_business_id != fb_metadata.fbe_external_business_id %}
+<a href="{% url 'fbe' store.id %}" class="btn btn-primary btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fab fa-facebook-f fa-fw"></i>
+    </span>
+    <span class="text">Connect to Facebook</span>
+</a>
+{% endif %}
+<a href="{% url 'viewProducts' store.id %}" class="btn btn-success btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-flag"></i>
+    </span>
+    <span class="text">Products</span>
+</a>
+
+<a href="{% url 'viewOrders' store.id %}" class="btn btn-success btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-flag"></i>
+    </span>
+    <span class="text">Orders</span>
+</a>
+
+{% endblock %}

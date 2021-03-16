@@ -1,0 +1,19 @@
+{% extends "core/header.html" %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">{{ APP_NAME | default:"EasyShops" }}</h6>
+        </div>
+        <div class="card-body">
+            Welcome to the Facebook Commerce reference Implementation project.
+            This project is a sample implementation of Facebook's Commerce APIs for third-party platforms.
+            The underlying application is designed to look and feel familiar to your own application
+            (i.e. with product management and order management).
+            <br /><br />
+            The source code is open-sourced and available on Github <a href="https://github.com/fbsamples/cp_reference" target="_blank">here</a>.
+        </div>
+    </div>
+</div>
+{% endblock %}

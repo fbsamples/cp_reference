@@ -1,0 +1,52 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+
+{% block content %}
+<h1 class="mt-4">Shops</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active">Shops</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-body">
+        This is where you can see all of your shops.
+    </div>
+</div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Shops
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Manage</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for store in stores %}
+                    <tr>
+                        <td>
+                            {{ store.name }}
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="{% url 'viewStore' store.id %}">Manage Shop</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="{% url 'updateStore' store.id %}">
+                                Update Shop
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+            <div class="card-header">
+                <h3 class="text-center font-weight-light my-4">Create a Shop</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                    {% endfor %}
+                    <div class="form-group">
+                        <label class="small mb-1" for="inputUsername">Business Name</label>
+                        {{form.business_name}}
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" data-toggle="tooltip" title="{{form.unique_business_id.help_text}}"
+                            for="inputUsername">Unique Business ID</label>
+                        {{form.unique_business_id}}
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="inputUsername">Timezone</label>
+                                {{form.timezone}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="inputUsername">Currency</label>
+                                {{form.currency}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-4 mb-0 text-center">
+                        <button class=" btn btn-primary" type="submit">
+                            <b>Create</b>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

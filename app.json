@@ -1,0 +1,73 @@
+{
+    "name": "EasyShops (Reference Implementation)",
+    "description": "This app is reference implementation of a 3rd party shop.",
+    "keywords": [
+        "facebook",
+        "commerce",
+        "onboarding",
+        "order management"
+    ],
+    "website": "https://developers.facebook.com/docs/commerce-platform",
+    "repository": "https://github.com/fbsamples/cp_reference",
+    "env": {
+        "DJANGO_SECRET_KEY": {
+            "description": "Django's secret key for the project.",
+            "value": "ADD_YOUR_DJANGO_SECRET_KEY_HERE"
+        },
+        "DJANGO_SECRET_ADMIN_URL": {
+            "description": "Secret base path for admin url.",
+            "value": "ADD_YOUR_DJANGO_SECRET_ADMIN_URL_HERE"
+        },
+        "DJANGO_SETTINGS_MODULE": {
+            "description": "Django setting to be used (development or production).",
+            "value": "ADD_YOUR_DJANGO_SETTINGS_MODULE_HERE"
+        },
+        "ALLOWED_PRODUCTION_HEROKU_HOST": {
+            "description": "Heroku app domain for allowed host",
+            "value": "ADD_YOUR_ALLOWED_PRODUCTION_HEROKU_HOST_HERE"
+        },
+        "APP_NAME": {
+            "description": "Your app name",
+            "value": "ADD_YOUR_APP_NAME_HERE"
+        },
+        "ALLOW_USER_REGISTRATIONS": {
+            "description": "TRUE/FALSE to Allow/Disallow user registration on the website",
+            "value": "ADD_YOUR_ALLOW_USER_REGISTRATIONS_HERE"
+        },
+        "FB_EXTENSION_REDIRECT_DOMAIN": {
+            "description": "Website, used for redirecting after fbe onboarding. This is usually your app domain",
+            "value": "ADD_YOUR_FB_EXTENSION_REDIRECT_DOMAIN_HERE"
+        },
+        "FB_APP_ID": {
+            "description": "The Facebook App ID that you would be using for this integration",
+            "value": "ADD_YOUR_FB_APP_ID_HERE"
+        },
+        "FB_APP_SECRET": {
+            "description": "The App secret for your application, assigned by Facebook",
+            "value": "ADD_YOUR_FB_APP_SECRET_HERE"
+        },
+        "FB_WEBHOOK_APP_TOKEN": {
+            "description": "Verification token that Facebook will echo back to you as part of callback URL verification. Set in webhook settings on https://developers.facebook.com/",
+            "value": "ADD_YOUR_FB_WEBHOOK_APP_TOKEN_HERE"
+        }
+    },
+    "formation": {
+        "web": {
+            "quantity": 1,
+            "size": "hobby"
+        }
+    },
+    "addons": [
+        {
+            "plan": "heroku-redis:hobby-dev"
+        },
+        {
+            "plan": "heroku-postgresql:hobby-dev"
+        }
+    ],
+    "buildpacks": [
+        {
+            "url": "heroku/python"
+        }
+    ]
+}

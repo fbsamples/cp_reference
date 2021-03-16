@@ -1,0 +1,194 @@
+{% extends "core/header.html" %}
+
+{% block content %}
+<div class="mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'viewOrders' store.id %}">Orders</a></li>
+        <li class="breadcrumb-item active">{{ ext_order_id }}</li>
+    </ol>
+    <h4 class="text-muted">Order #: {{ orderId }} - {{ full_name }}</h4>
+</div>
+
+<div class="row mb-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Number of Items: {{ total_items }}</h5>
+                <hr />
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-info" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if not missing_items %}
+                {% if can_fulfill %}
+                <a href="{% url 'fulfillOrder' storeId orderId %}">
+                    <button class="btn btn-primary btn-icon-split">
+                        Fulfill Order
+                    </button>
+                </a>
+                {% else %}
+                <div class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                    title="Fully cancelled or fully fulfilled orders cannot be fulfilled">
+                    <button class="btn btn-primary btn-icon-split" style="pointer-events: none;" disabled>
+                        Fulfill Order
+                    </button>
+                </div>
+                {% endif %}
+                {% if can_refund %}
+                <a href="{% url 'refundOrder' storeId orderId %}">
+                    <button class="btn btn-primary btn-icon-split">
+                        Refund Order
+                    </button>
+                </a>
+                {% else %}
+                <div class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                    title="Unfulfilled or fully refunded orders cannot be refunded">
+                    <button class="btn btn-primary btn-icon-split" style="pointer-events: none;" disabled>
+                        Refund Order
+                    </button>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% if can_cancel %}
+                <a href="{% url 'cancelOrder' storeId orderId %}">
+                    {% if missing_items %}
+                    <button class="btn btn-primary btn-icon-split" data-toggle="tooltip"
+                        title="This order include products not in the catalog, and can only be cancelled">
+                        Cancel Order
+                    </button>
+                    {% else %}
+                    <button class="btn btn-primary btn-icon-split">
+                        Cancel Order
+                    </button>
+                    {% endif %}
+                </a>
+                {% else %}
+                <div class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                    title="Fully cancelled or fully fulfilled orders cannot be cancelled">
+                    <button class="btn btn-primary btn-icon-split" style="pointer-events: none;" disabled>
+                        Cancel Order
+                    </button>
+                </div>
+                {% endif %}
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Order Status</th>
+                            <th scope="col">Fulfillment Status</th>
+                            <th scope="col">Cancellation Status</th>
+                            <th scope="col">Refund Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% if missing_items %}
+                            <td data-toggle="tooltip"
+                                title="This order include products not in the catalog, and can only be cancelled">
+                                {{ status }}</td>
+                            {% else %}
+                            <td>{{ status }}</td>
+                            {% endif %}
+                            <td>{{ fulfillment_status }}</td>
+                            <td>{{ cancellation_status }}</td>
+                            <td>{{ refund_status }}</td>
+                        </tr>
+                    </tbody>
+                    <hr />
+                    <table class="table">
+                        {% if missing_items %}
+                        <div class="alert alert-danger" role="alert">
+                            Item(s) in this order no longer exist in the catalog. Suggest cancelling the order.
+                        </div>
+                        {% else %}
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <img class="img-thumbnail" src="{{ item.image_link }}" />
+                                        </div>
+                                        <div class="col">
+                                            {{ item.title }}<br />
+                                            <p class="text-muted">Id: {{ item.id }} <br /> Color: {{ item.color }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ item.quantity }}</td>
+                                <td id="{{ item.id }}"></td>
+                                <td id="{{ item.id }}-total">{{ item.price_for_item }} {{ currency }}</td>
+                            </tr>
+                            <script>
+                                formatCurrency("{{ currency }}", parseFloat("{{ item.amount }}"), "{{ item.id }}");
+                                formatCurrency("{{ currency }}", parseFloat("{{ item.price_for_item }}"), "{{ item.id }}-total");
+                            </script>
+                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <th>Total:</th>
+                                <td id="total-price"></td>
+                            </tr>
+                            <script>formatCurrency("{{ currency }}", parseFloat("{{ total_price }}"), "total-price");</script>
+                        </tbody>
+                        {% endif %}
+                    </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Order Summary</h5>
+                <p class="card-text">
+                    Facebook Order ID: {{ ext_order_id }} <br />
+                    Date Ordered: {{ created }}<br />
+                    Items Ordered: {{ total_items }}
+                </p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Shipping Address</h5>
+                <p class="card-text">
+                    {{ addr.name }}<br />
+                    {{ addr.street1 }}<br />
+                    {% if addr.street2 != '' %}
+                    {{ addr.street2 }}<br />
+                    {% endif %}
+                    {{ addr.city }}, {{ addr.state }} {{ addr.postal_code }}<br />
+                    {{ addr.country }}
+                </p>
+                <a href="mailto:{{ email }}"><button class="btn btn-warning">Contact Buyer</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-4">
+    <a href="{% url 'viewOrders' storeId %}">
+        <button class="btn btn-secondary">
+            <span class="icon text-white-50">
+                <i class="fas fa-arrow-left"></i>
+            </span>
+            Back to Order List
+        </button>
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "core/header.html" %}
+{% load static %}
+
+{% block content %}
+<h1 class="mt-4">Graph Token Settings</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStores' %}">Shops</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'viewStore' store.id %}">{{ store.name }}</a></li>
+    <li class="breadcrumb-item active">Notifications</li>
+</ol>
+
+<div class="row mb-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Token Details</h5>
+                <hr />
+                <p class="card-text">
+                    Type: {{store.facebookmetadata.token_type}} <br />
+                    Created: {{ store.facebookmetadata.token_creation_date }}<br />
+                    Expiration:
+                    {% if store.facebookmetadata.token_type != 'SYSTEM_USER' %}
+                    {{ store.facebookmetadata.token_expiration_date }}
+                    {% else %}
+                    Never expires
+                    {% endif %}
+                    <br />
+                </p>
+                {% if store.facebookmetadata.token_type != 'SYSTEM_USER' %}
+                <hr />
+                <form action="{% url 'tokenSettings' store.id %}" class="btn" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-primary" value="Get System User Token"
+                        name="Get System User Token">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
